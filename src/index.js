@@ -1,8 +1,9 @@
 const { GraphQLServer } = require("graphql-yoga");
 const Mongoose = require("mongoose");
+const { mongodbUriUser, mongodbUriClusterAndCollection, mongodbUserPassword} = require('./secrets')
 
-const Query = require('./resolvers/Query')
-const Mutation = require('./resolvers/Mutation') 
+const Query = require('./resolvers/Query');
+const Mutation = require('./resolvers/Mutation') ;
 
 const resolvers = {
   Query,
@@ -19,10 +20,8 @@ const options = {
   port: 4000,
 };
 
-const mongodbPass = 'test';
-
 Mongoose.connect(
-  `mongodb+srv://CCurwen:${mongodbPass}@tsundoku-xvgwb.mongodb.net/tsundoku_test?retryWrites=true`,
+  mongodbUriUser + mongodbUserPassword + mongodbUriClusterAndCollection,
   { useNewUrlParser: true }
 )
   .then(() => {

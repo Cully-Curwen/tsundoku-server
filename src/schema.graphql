@@ -1,0 +1,71 @@
+type Query {
+  collections: [Collection!]!
+}
+
+type Mutation {
+  createIssue: Issue!
+  userSignup(name: String!, email: String!, password: String!): UserAuthPayload
+  userLogin(email: String!, password: String!): UserAuthPayload
+  curatorSignup(name: String!, email: String!, password: String!, img: String, blurb: String): CuratorAuthPayload
+  curatorLogin(email: String!, password: String!): CuratorAuthPayload
+  # curatorUpdate(name: String, email: String, password: String!, img: String, blurb: String): CuratorAuthPayload
+  # userUpdate(name: String, email: String, password: String!): UserAuthPayload
+}
+
+type UserAuthPayload {
+  token: String
+  user: User
+}
+
+type CuratorAuthPayload {
+  token: String
+  curator: Curator
+}
+
+type Curator {
+  id: ID!
+  name: String!
+  email: String!
+  collections: [Collection!]!
+  img: String
+  blurb: String
+}
+
+type Collection {
+  id: ID!
+  name: String!
+  owner: Curator!
+  tags: [String!]!
+  issues: [Issue!]!
+  img: String
+  blurb: String
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  collections: [Collection!]!
+  curators: [Curator!]!
+  issues: [Issue!]!
+}
+
+type Issue {
+  id: ID!
+  title: String
+  commentary: String
+  childOf: Collection!
+  serialNum: Int!
+  content: [Content!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Content {
+  id: ID!
+  subTitle: String!
+  url: String!
+  img: String
+  description: String
+  commentary: String
+}

@@ -48,7 +48,12 @@ async function createIssue(args) {
 };
 
 async function editIssue(args) {
-  
+  await Issue.updateOne({_id: new ObjectId(args.id)}, {
+    title: args.title,
+    commentary: args.commentary,
+    content: [],
+  });
+  return Issue.findOne({_id: new ObjectId(args.id)});
 }
 
 const findIssueById = async id => Issue.findOne({_id: new ObjectId(id)}, (err, data) => {
@@ -60,6 +65,6 @@ const findIssueById = async id => Issue.findOne({_id: new ObjectId(id)}, (err, d
 module.exports = {
   Issue,
   createIssue,
-  // editIssue,
+  editIssue,
   findIssueById,
 };

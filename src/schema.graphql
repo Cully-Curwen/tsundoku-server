@@ -17,7 +17,7 @@ type Mutation {
   collectionEdit(id: ID!, name: String!, tags: [String!]!, img: String, blurb: String): Collection 
 
   issueCreate(title: String!, commentary: String, collectionId: String!, content: [InputContent!]!): Curator 
-  # issueEdit(id: ID!, title: String!, commentary: String, content: [InputContent!]!): Issue
+  issueEdit(id: ID!, title: String!, commentary: String, content: [InputContent!]!): Issue
   # subscribeTo corator/collection/issue
   # unSubscribe curator/collection/issue
 }

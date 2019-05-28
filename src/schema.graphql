@@ -6,18 +6,20 @@ type Query {
 type Mutation {
   userSignup(name: String!, email: String!, password: String!): UserAuthPayload
   userLogin(email: String!, password: String!): UserAuthPayload
+  userUpdate(name: String, email: String, password: String!, newPassword: String): UserAuthPayload
+  # subscribe curator/collection/issue
+  # unsubscribe curator/collection/issue
+
   curatorSignup(name: String!, email: String!, password: String!, img: String, blurb: String): CuratorAuthPayload
   curatorLogin(email: String!, password: String!): CuratorAuthPayload
   # curatorUpdate(name: String, email: String, password: String!, img: String, blurb: String): CuratorAuthPayload
-  # userUpdate(name: String, email: String, password: String!): UserAuthPayload
 
   collectionCreate(name: String!, tags: [String!]!, img: String blurb: String): Curator
   collectionEdit(id: ID!, name: String!, tags: [String!]!, img: String, blurb: String): Collection 
 
   issueCreate(title: String!, commentary: String, collectionId: String!, content: [InputContent!]!): Curator 
   issueEdit(id: ID!, title: String!, commentary: String, content: [InputContent!]!): Issue
-  # subscribeTo corator/collection/issue
-  # unSubscribe curator/collection/issue
+  
 }
 
 type UserAuthPayload {

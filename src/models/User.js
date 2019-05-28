@@ -1,6 +1,7 @@
 const Mongoose = require("mongoose");
 
 const Schema = Mongoose.Schema;
+const ObjectId = Mongoose.Types.ObjectId;
 
 const userSchema = new Schema({
 
@@ -45,13 +46,34 @@ async function createUser(args) {
     });
     return await newUser.save();
   } catch(err) {
-    throw err 
+    throw err;
+  };
+};
+
+async function editUser(args) {
+  try {
+    await User.updateOne({_id: new ObjectId(args.id)}, {
+      name: args.name,
+      email: args.email,
+      password: args.password,
+    });
+    return User.findOne({_id: new ObjectId(args.id)});
+  } catch (err) {
+    throw err;
   };
 };
 
 const findUser = async (args) => await User.findOne(args);
 
+const findUserById = id => 
+    User.findOne({_id: new ObjectId(id)}, (err, data) => {
+    if (err) throw err;
+    return data;
+  });
+
 module.exports = {
   createUser,
+  editUser,
   findUser,
+  findUserById,
 };

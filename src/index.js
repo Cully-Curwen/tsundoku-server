@@ -6,12 +6,14 @@ const Query = require('./resolvers/Query');
 const Mutation = require('./resolvers/Mutation');
 const Curator = require('./resolvers/Curator')
 const Collection = require('./resolvers/Collection');
+const Content = require('./resolvers/Content')
 
 const resolvers = {
   Query,
   Mutation,
   Curator,
   Collection,
+  Content,
 };
 
 const server = new GraphQLServer({

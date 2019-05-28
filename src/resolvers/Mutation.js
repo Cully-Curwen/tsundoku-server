@@ -4,6 +4,7 @@ const { APP_SECRET, getUserId, getCuratorId } = require('../utils');
 const { createUser, findUser } = require('../models/User');
 const { createCurator, findCurator, findCuratorById } = require('../models/Curator');
 const { createCollection, editCollection, findCollectionById } = require('../models/Collection');
+const { createIssue } = require('../models/Issue')
 
 async function userSignup(parent, args, context, info) {
   const password = await bcrypt.hash(args.password, 10)
@@ -41,7 +42,7 @@ async function curatorSignup(parent, args, context, info) {
   return {
     token,
     curator,
-  }
+  };
 };
 
 async function curatorLogin(parent, args, context, info) {
@@ -56,7 +57,7 @@ async function curatorLogin(parent, args, context, info) {
   return {
     token,
     curator,
-  }
+  };
 };
 
 async function collectionCreate(parent, args, context, info) {
@@ -64,14 +65,32 @@ async function collectionCreate(parent, args, context, info) {
   await createCollection({ ...args, owner });
 
   return findCuratorById(owner);
-}
+};
 
 async function collectionEdit(parent, args, context, info) {
   const owner = getCuratorId(context);
-  await editCollection(args);
+  const collection = await findCollectionById(args.id);
+  console.log('check 1: ', owner ,'check2: ', collection.owner)
+  if (owner == collection.owner) {
+    return await editCollection(args);
+  } else {
+    throw new Error('Not Authorised');
+  };
+};
 
-  return findCuratorById(owner);
-}
+async function issueCreate(parent, args, context, info) {
+  const owner = getCuratorId(context);
+  const collection = await findCollectionById(args.collectionId);
+  const serialNum = collection.issues.length + 1;
+  console.log('check 1: ', owner ,'check2: ', collection.owner)
+  if (owner == collection.owner) {
+    await createIssue({ ...args, serialNum });
+
+    return findCuratorById(owner);
+  } else {
+    throw new Error('Not Authorised');
+  };
+};
 
 module.exports = {
   userSignup,
@@ -80,4 +99,6 @@ module.exports = {
   curatorLogin,
   collectionCreate,
   collectionEdit,
+  issueCreate,
+  // issueEdit,
 }

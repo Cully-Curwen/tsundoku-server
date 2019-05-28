@@ -1,4 +1,5 @@
 const Mongoose = require("mongoose");
+const { Collection } = require('./Collection')
 
 const Schema = Mongoose.Schema;
 
@@ -23,15 +24,30 @@ const issueSchema = new Schema({
   content: [{
     type: Schema.Types.ObjectId,
     ref: "Content"
-  }],
-  createdAt: {
-    type: String,
-    required: true 
-  },
-  updatedAt: {
-    type: String,
-    required: true 
-  }
-});  
+  }]
+}, {timestamps: true}
+);  
 
-module.exports =  Mongoose.model("Issue", issueSchema)
+Issue =  Mongoose.model("Issue", issueSchema);
+
+async function createIssue(args) {
+  try {
+    const newIssue = new Issue({
+      title: args.title,
+      commentary: args.commentary,
+      childOf: args.collectionId,
+      serialNum: args.serialNum,
+      content: [],
+    });
+    const issue = await newIssue.save();
+    Collection.findOneAndUpdate({_id: new ObjectId(args.collectionId)}, { $push: { issues: issue.id } } )
+  } catch (err) {
+    throw err;
+  };
+};
+
+module.exports = {
+  issueSchema,
+  createIssue,
+
+};

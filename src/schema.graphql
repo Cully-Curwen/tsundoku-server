@@ -14,8 +14,10 @@ type Mutation {
   # create issues/content
   # edit issues/content
   collectionCreate(name: String!, tags: [String!]!, img: String blurb: String): Curator
-  collectionEdit(id: ID!, name: String, tags: [String!], img: String, blurb: String): Curator
+  collectionEdit(id: ID!, name: String!, tags: [String!]!, img: String, blurb: String): Collection 
 
+  issueCreate(title: String!, commentary: String, collectionId: String!, content: [InputContent!]!): Curator 
+  # issueEdit(id: ID!, title: String!, commentary: String, content: [InputContent!]!): Issue
   # subscribeTo corator/collection/issue
   # unSubscribe curator/collection/issue
 }
@@ -70,6 +72,15 @@ type Issue {
 }
 
 type Content {
+  id: ID!
+  subTitle: String!
+  url: String!
+  img: String
+  description: String
+  commentary: String
+}
+
+input InputContent {
   id: ID!
   subTitle: String!
   url: String!

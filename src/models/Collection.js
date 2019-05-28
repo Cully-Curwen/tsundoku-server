@@ -44,25 +44,29 @@ async function createCollection(args) {
       blurb: args.blurb,
     });
     const collection = await newCollection.save();
-    return Curator.findOneAndUpdate({_id: new ObjectId(args.owner)}, { $push: { collections: collection.id } } )
+    Curator.findOneAndUpdate({_id: new ObjectId(args.owner)}, { $push: { collections: collection.id } } )
   } catch (err) {
     throw err;
   };
 };
 
 async function editCollection(args) {
-  
+  await Collection.updateOne({_id: new ObjectId(args.id)}, {
+    name: args.name,
+    tags: args.tags,
+    img: args.img,
+    blurb: args.blurb,
+  });
 }
 
-async function findCollections(collections) {
-  return await Collection.find({_id: ({ $in : collections }) })
-}
-
-const findCollectionsById = async id => await Collection.find({_id: new ObjectId(id)});
+const findCollectionById = id => 
+    Collection.findOne({_id: new ObjectId(id)}, (err, data) => {
+    if (err) throw err;
+    return data;
+  });
 
 module.exports = {
   createCollection,
   editCollection,
-  findCollections,
-  findCollectionsById,
+  findCollectionById,
 };

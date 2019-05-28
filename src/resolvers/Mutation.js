@@ -66,10 +66,18 @@ async function collectionCreate(parent, args, context, info) {
   return findCuratorById(owner);
 }
 
+async function collectionEdit(parent, args, context, info) {
+  const owner = getCuratorId(context);
+  await editCollection(args);
+
+  return findCuratorById(owner);
+}
+
 module.exports = {
   userSignup,
   userLogin,
   curatorSignup,
   curatorLogin,
   collectionCreate,
+  collectionEdit,
 }

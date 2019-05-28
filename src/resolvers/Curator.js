@@ -1,7 +1,7 @@
-const { findCollections } = require('../models/Collection');
+const { findCollectionById } = require('../models/Collection');
 
-function collections(parent, args, context, info) {
-  return findCollections(args.collections);
+async function collections(parent, args, context, info) {
+  return parent.collections.map(async id  => await findCollectionById(id))
 };
 
 module.exports = {

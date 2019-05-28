@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { APP_SECRET, getUserId, getCuratorId } = require('../utils');
 const { createUser, editUser, findUser, findUserById } = require('../models/User');
-const { createCurator, findCurator, findCuratorById } = require('../models/Curator');
+const { createCurator, editCurator, findCurator, findCuratorById } = require('../models/Curator');
 const { createCollection, editCollection, findCollectionById } = require('../models/Collection');
 const { createIssue, editIssue, findIssueById } = require('../models/Issue');
 
@@ -49,7 +49,6 @@ async function userUpdate(parent, args, context, info) {
   };
 
   const user = await editUser(newDetails);
-  
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
   
   return {
@@ -67,6 +66,7 @@ async function curatorSignup(parent, args, context, info) {
   return {
     token,
     curator,
+    badge: "Curator"
   };
 };
 
@@ -82,6 +82,34 @@ async function curatorLogin(parent, args, context, info) {
   return {
     token,
     curator,
+    badge: "Curator"
+  };
+};
+
+async function curatorUpdate(parent, args, context, info) {
+  const curatorId = getCuratorId(context);
+  const curatorAuth = await findCuratorById(curatorId);
+  if (!curatorAuth) throw new Error('No such curator found');
+  
+  const valid = await bcrypt.compare(args.password, curatorAuth.password);
+  if (!valid) throw new Error('Invalid password');
+
+  const newDetails = {
+    id: curatorId,
+    name: args.name ? args.name : curatorAuth.name,
+    email: args.email ? args.email : curatorAuth.email,
+    password: args.newPassword ? args.newPassword : curatorAuth.password,
+    img: args.img ? args.img : curatorAuth.img,
+    blurb: args.blurb ? args.blurb : curatorAuth.blurb,
+  };
+
+  const curator = await editCurator(newDetails);
+  const token = jwt.sign({ curatorId: curator.id }, APP_SECRET);
+  
+  return {
+    token,
+    curator,
+    badge: "Curator"
   };
 };
 
@@ -132,6 +160,7 @@ module.exports = {
   userUpdate,
   curatorSignup,
   curatorLogin,
+  curatorUpdate,
   collectionCreate,
   collectionEdit,
   issueCreate,

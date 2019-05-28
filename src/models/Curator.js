@@ -51,6 +51,21 @@ async function createCurator(args) {
   };
 };
 
+async function editCurator(args) {
+  try {
+    await Curator.updateOne({_id: new ObjectId(args.id)}, {
+      name: args.name,
+      email: args.email,
+      password: args.password,
+      img: args.img,
+      blurb: args.blurb,
+    });
+    return Curator.findOne({_id: new ObjectId(args.id)});
+  } catch (err) {
+    throw err;
+  };
+};
+
 const findCurator = async args => await Curator.findOne({ args })
 
 const findCuratorById = async id => await Curator.findOne({_id: new ObjectId(id)});
@@ -58,6 +73,7 @@ const findCuratorById = async id => await Curator.findOne({_id: new ObjectId(id)
 module.exports = {
   Curator,
   createCurator,
+  editCurator,
   findCurator,
   findCuratorById,
 }

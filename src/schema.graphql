@@ -12,7 +12,7 @@ type Mutation {
 
   curatorSignup(name: String!, email: String!, password: String!, img: String, blurb: String): CuratorAuthPayload
   curatorLogin(email: String!, password: String!): CuratorAuthPayload
-  # curatorUpdate(name: String, email: String, password: String!, img: String, blurb: String): CuratorAuthPayload
+  curatorUpdate(name: String, email: String, password: String!, newPassword: String, img: String, blurb: String): CuratorAuthPayload
 
   collectionCreate(name: String!, tags: [String!]!, img: String blurb: String): Curator
   collectionEdit(id: ID!, name: String!, tags: [String!]!, img: String, blurb: String): Collection 
@@ -30,6 +30,7 @@ type UserAuthPayload {
 type CuratorAuthPayload {
   token: String
   curator: Curator
+  badge: String
 }
 
 type Curator {

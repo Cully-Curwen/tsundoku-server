@@ -1,6 +1,7 @@
 const Mongoose = require("mongoose");
 
 const Schema = Mongoose.Schema;
+const ObjectId = Mongoose.Types.ObjectId;
 
 const curatorSchema = new Schema({
   name: {
@@ -50,11 +51,13 @@ async function createCurator(args) {
   };
 };
 
-const findCurator = async (args) => {
-  return await Curator.findOne(args) 
-}
+const findCurator = async args => await Curator.findOne({ args })
+
+const findCuratorById = async id => await Curator.findOne({_id: new ObjectId(id)});
 
 module.exports = {
+  Curator,
   createCurator,
   findCurator,
+  findCuratorById,
 }

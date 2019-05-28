@@ -1,6 +1,8 @@
 const Mongoose = require("mongoose");
+const { Curator } = require('./Curator')
 
 const Schema = Mongoose.Schema;
+const ObjectId = Mongoose.Types.ObjectId;
 
 const collectionSchema = new Schema({
   name: {
@@ -29,4 +31,38 @@ const collectionSchema = new Schema({
   }
 }); 
 
-module.exports =  Mongoose.model("Collection", collectionSchema)
+Collection = Mongoose.model("Collection", collectionSchema)
+
+async function createCollection(args) {
+  try {
+    const newCollection = new Collection({
+      name: args.name,
+      owner: args.owner,
+      tags: [...args.tags],
+      issues: [],
+      img: args.img,
+      blurb: args.blurb,
+    });
+    const collection = await newCollection.save();
+    return Curator.findOneAndUpdate({_id: new ObjectId(args.owner)}, { $push: { collections: collection.id } } )
+  } catch (err) {
+    throw err;
+  };
+};
+
+async function editCollection(args) {
+  
+}
+
+async function findCollections(collections) {
+  return await Collection.find({_id: ({ $in : collections }) })
+}
+
+const findCollectionsById = async id => await Collection.find({_id: new ObjectId(id)});
+
+module.exports = {
+  createCollection,
+  editCollection,
+  findCollections,
+  findCollectionsById,
+};

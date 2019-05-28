@@ -3,11 +3,15 @@ const Mongoose = require("mongoose");
 const { mongodbUriUser, mongodbUriClusterAndCollection, mongodbUserPassword} = require('./secrets')
 
 const Query = require('./resolvers/Query');
-const Mutation = require('./resolvers/Mutation') ;
+const Mutation = require('./resolvers/Mutation');
+const Curator = require('./resolvers/Curator')
+const Collection = require('./resolvers/Collection');
 
 const resolvers = {
   Query,
   Mutation,
+  Curator,
+  Collection,
 };
 
 const server = new GraphQLServer({
@@ -22,7 +26,7 @@ const options = {
 
 Mongoose.connect(
   mongodbUriUser + mongodbUserPassword + mongodbUriClusterAndCollection,
-  { useNewUrlParser: true }
+  { useNewUrlParser: true, useFindAndModify: false  }
 )
   .then(() => {
     server.start(options, ({ port }) => console.log(`Connected to DB\nServer started, listening on port ${port} for incoming requests.`

@@ -1,8 +1,9 @@
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const { APP_SECRET, getUserId } = require('../utils')
-const { createUser, findUser } = require('../models/User')
-const { createCurator, findCurator } = require('../models/Curator')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { APP_SECRET, getUserId, getCuratorId } = require('../utils');
+const { createUser, findUser } = require('../models/User');
+const { createCurator, findCurator, findCuratorById } = require('../models/Curator');
+const { createCollection, editCollection, findCollectionById } = require('../models/Collection');
 
 async function userSignup(parent, args, context, info) {
   const password = await bcrypt.hash(args.password, 10)
@@ -58,9 +59,17 @@ async function curatorLogin(parent, args, context, info) {
   }
 };
 
+async function collectionCreate(parent, args, context, info) {
+  const owner = getCuratorId(context);
+  await createCollection({ ...args, owner });
+
+  return findCuratorById(owner);
+}
+
 module.exports = {
   userSignup,
   userLogin,
   curatorSignup,
   curatorLogin,
+  collectionCreate,
 }

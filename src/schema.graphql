@@ -1,15 +1,23 @@
 type Query {
   collections: [Collection!]!
+  # collections/curators/issues
 }
 
 type Mutation {
-  createIssue: Issue!
   userSignup(name: String!, email: String!, password: String!): UserAuthPayload
   userLogin(email: String!, password: String!): UserAuthPayload
   curatorSignup(name: String!, email: String!, password: String!, img: String, blurb: String): CuratorAuthPayload
   curatorLogin(email: String!, password: String!): CuratorAuthPayload
   # curatorUpdate(name: String, email: String, password: String!, img: String, blurb: String): CuratorAuthPayload
   # userUpdate(name: String, email: String, password: String!): UserAuthPayload
+
+  # create collection/issues/content
+  # edit collection/issues/content
+  collectionCreate(name: String!, tags: [String!]!, img: String blurb: String): Curator
+  collectionEdit(name: String, tags: [String!], img: String, blurb: String): Curator
+
+  # subscribeTo corator/collection/issue
+  # unSubscribe curator/collection/issue
 }
 
 type UserAuthPayload {

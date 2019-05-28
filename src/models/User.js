@@ -49,11 +49,9 @@ async function createUser(args) {
   };
 };
 
-const findUser = async (args) => {
-  return await User.findOne(args) 
-}
+const findUser = async (args) => await User.findOne(args);
 
 module.exports = {
   createUser,
   findUser,
-}
+};

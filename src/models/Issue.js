@@ -23,9 +23,31 @@ const issueSchema = new Schema({
     required: true  
   },
   content: [{
-    type: Schema.Types.ObjectId,
-    ref: "Content"
-  }]
+    id: {
+      type: String,
+      required: true,
+    },
+    subTitle: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+    img: {
+      type: String,
+      required: false,
+    },
+    description: {
+      type: String,
+      required: false,
+    },
+    commentary: {
+      type: String,
+      required: false
+    }
+  }],
 }, {timestamps: true}
 );  
 
@@ -38,7 +60,7 @@ async function createIssue(args) {
       commentary: args.commentary,
       childOf: args.collectionId,
       serialNum: args.serialNum,
-      content: [],
+      content: [...args.content],
     });
     const issue = await newIssue.save();
     return Collection.findOneAndUpdate({_id: new ObjectId(args.collectionId)}, { $push: { issues: issue.id } } )
@@ -51,7 +73,7 @@ async function editIssue(args) {
   await Issue.updateOne({_id: new ObjectId(args.id)}, {
     title: args.title,
     commentary: args.commentary,
-    content: [],
+    content: [...args.content],
   });
   return Issue.findOne({_id: new ObjectId(args.id)});
 }

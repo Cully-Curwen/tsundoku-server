@@ -11,8 +11,6 @@ type Mutation {
   # curatorUpdate(name: String, email: String, password: String!, img: String, blurb: String): CuratorAuthPayload
   # userUpdate(name: String, email: String, password: String!): UserAuthPayload
 
-  # create issues/content
-  # edit issues/content
   collectionCreate(name: String!, tags: [String!]!, img: String blurb: String): Curator
   collectionEdit(id: ID!, name: String!, tags: [String!]!, img: String, blurb: String): Collection 
 

@@ -70,7 +70,6 @@ async function collectionCreate(parent, args, context, info) {
 async function collectionEdit(parent, args, context, info) {
   const owner = getCuratorId(context);
   const collection = await findCollectionById(args.id);
-  console.log('check 1: ', owner ,'check2: ', collection.owner)
   if (owner == collection.owner) {
     return await editCollection(args);
   } else {
@@ -82,7 +81,6 @@ async function issueCreate(parent, args, context, info) {
   const owner = getCuratorId(context);
   const collection = await findCollectionById(args.collectionId);
   const serialNum = collection.issues.length + 1;
-  console.log('check 1: ', owner ,'check2: ', collection.owner)
   if (owner == collection.owner) {
     await createIssue({ ...args, serialNum });
 

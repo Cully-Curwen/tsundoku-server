@@ -2,6 +2,7 @@ const Mongoose = require("mongoose");
 const { Collection } = require('./Collection')
 
 const Schema = Mongoose.Schema;
+const ObjectId = Mongoose.Types.ObjectId;
 
 const issueSchema = new Schema({
 
@@ -40,14 +41,25 @@ async function createIssue(args) {
       content: [],
     });
     const issue = await newIssue.save();
-    Collection.findOneAndUpdate({_id: new ObjectId(args.collectionId)}, { $push: { issues: issue.id } } )
+    return Collection.findOneAndUpdate({_id: new ObjectId(args.collectionId)}, { $push: { issues: issue.id } } )
   } catch (err) {
     throw err;
   };
 };
 
-module.exports = {
-  issueSchema,
-  createIssue,
+async function editIssue(args) {
+  
+}
 
+const findIssueById = async id => Issue.findOne({_id: new ObjectId(id)}, (err, data) => {
+  if (err) throw err;
+  return data;
+});
+
+
+module.exports = {
+  Issue,
+  createIssue,
+  // editIssue,
+  findIssueById,
 };

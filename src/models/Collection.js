@@ -66,9 +66,14 @@ const findCollectionById = id =>
     return data;
   });
 
+  async function findAllCollections(args) {
+    return Collection.find().sort({name: -1});
+  }
+
 module.exports = {
   Collection,
   createCollection,
   editCollection,
   findCollectionById,
+  findAllCollections
 };

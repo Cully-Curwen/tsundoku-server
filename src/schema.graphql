@@ -1,6 +1,11 @@
 type Query {
-  collections: [Collection!]!
-  # collections/curators/issues
+  userData: User
+  curatorData: Curator
+
+  exploreCurators: [PublicCurator!]!
+  exploreCollections: [Collection!]!
+
+  allIssues(childOf: String!): [Issue!]!
 }
 
 type Mutation {
@@ -38,6 +43,14 @@ type Curator {
   id: ID!
   name: String!
   email: String!
+  collections: [Collection!]!
+  img: String
+  blurb: String
+}
+
+type PublicCurator {
+  id: ID!
+  name: String!
   collections: [Collection!]!
   img: String
   blurb: String
@@ -83,10 +96,21 @@ type Content {
 }
 
 input InputContent {
-  id: ID!
   subTitle: String!
   url: String!
   img: String
   description: String
   commentary: String
 }
+
+# enum CollectionOrderByInput {
+#   name_ASC
+#   name_DESC
+  
+# }
+
+# enum CollectionOrderByInput {
+#   name_ASC
+#   name_DESC
+  
+# }

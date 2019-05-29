@@ -70,10 +70,15 @@ const findCurator = async args => await Curator.findOne( args )
 
 const findCuratorById = async id => await Curator.findOne({_id: new ObjectId(id)});
 
+async function findAllCurators(args) {
+  return Curator.find().sort({name: -1});
+}
+
 module.exports = {
   Curator,
   createCurator,
   editCurator,
   findCurator,
   findCuratorById,
+  findAllCurators,
 }

@@ -23,10 +23,6 @@ const issueSchema = new Schema({
     required: true  
   },
   content: [{
-    id: {
-      type: String,
-      required: true,
-    },
     subTitle: {
       type: String,
       required: true,
@@ -83,10 +79,19 @@ const findIssueById = async id => Issue.findOne({_id: new ObjectId(id)}, (err, d
   return data;
 });
 
+async function findLatestIssue(id) {
+  return Issue.find({childOf: new ObjectId(id)}).sort({createdAt: -1}).limit(1)
+}
+
+async function findAllIssues(id) {
+  return Issue.find({childOf: new ObjectId(id)}).sort({createdAt: -1})
+}
 
 module.exports = {
   Issue,
   createIssue,
   editIssue,
   findIssueById,
+  findLatestIssue,
+  findAllIssues,
 };

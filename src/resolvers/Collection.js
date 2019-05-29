@@ -1,8 +1,8 @@
-const { findCurator } = require('../models/Curator');
+const { findCuratorById } = require('../models/Curator');
 const { findIssueById } = require('../models/Issue');
 
 function owner(parent, args, context, info) {
-  return findCurator({id: args.owner});
+  return findCuratorById(args.owner);
 };
 
 async function issues(parent, args, context, info) {

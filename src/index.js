@@ -4,7 +4,8 @@ const { mongodbUriUser, mongodbUriClusterAndCollection, mongodbUserPassword} = r
 
 const Query = require('./resolvers/Query');
 const Mutation = require('./resolvers/Mutation');
-const Curator = require('./resolvers/Curator')
+const Curator = require('./resolvers/Curator');
+const User = require('./resolvers/User');
 const Collection = require('./resolvers/Collection');
 const Content = require('./resolvers/Content');
 const Issue = require('./resolvers/Issue');
@@ -13,6 +14,7 @@ const resolvers = {
   Query,
   Mutation,
   Curator,
+  User,
   Collection,
   Content,
   Issue,

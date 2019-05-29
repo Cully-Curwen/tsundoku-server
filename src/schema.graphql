@@ -7,8 +7,9 @@ type Mutation {
   userSignup(name: String!, email: String!, password: String!): UserAuthPayload
   userLogin(email: String!, password: String!): UserAuthPayload
   userUpdate(name: String, email: String, password: String!, newPassword: String): UserAuthPayload
-  # subscribe curator/collection/issue
-  # unsubscribe curator/collection/issue
+
+  subscribe(curators: String, collections: String, issues: String): User
+  unsubscribe(curators: String, collections: String, issues: String): User 
 
   curatorSignup(name: String!, email: String!, password: String!, img: String, blurb: String): CuratorAuthPayload
   curatorLogin(email: String!, password: String!): CuratorAuthPayload

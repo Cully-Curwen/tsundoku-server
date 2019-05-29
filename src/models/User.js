@@ -71,9 +71,21 @@ const findUserById = id =>
     return data;
   });
 
+async function subscribeTo(args, id) {
+  await User.findOneAndUpdate({_id: new ObjectId(id)}, { $push: args } );
+  return User.findOne({_id: new ObjectId(id)});
+}
+
+async function unsubscribeFrom(args, id) {
+  await User.findOneAndUpdate({_id: new ObjectId(id)}, { $pull: args } );
+  return User.findOne({_id: new ObjectId(id)});
+}
+
 module.exports = {
   createUser,
   editUser,
   findUser,
   findUserById,
+  subscribeTo,
+  unsubscribeFrom,
 };

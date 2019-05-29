@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { APP_SECRET, getUserId, getCuratorId } = require('../utils');
-const { createUser, editUser, findUser, findUserById } = require('../models/User');
+const { createUser, editUser, findUser, findUserById, subscribeTo, unsubscribeFrom } = require('../models/User');
 const { createCurator, editCurator, findCurator, findCuratorById } = require('../models/Curator');
 const { createCollection, editCollection, findCollectionById } = require('../models/Collection');
 const { createIssue, editIssue, findIssueById } = require('../models/Issue');
@@ -157,6 +157,38 @@ async function issueEdit(parent, args, context, info) {
   };
 };
 
+async function subscribe(parent, args, context, info) { 
+  const userId = getUserId(context);
+  const user = await findUserById(userId);
+  const [value] = Object.values(args)
+  const check = (
+    user.collections.includes(value)
+    || user.curators.includes(value)
+    || user.issues.includes(value)
+  );
+  if (check) {
+    throw new Error('Already Subscribed');
+  } else {
+    return subscribeTo(args, userId);
+  };
+};
+
+async function unsubscribe(parent, args, context, info) { 
+  const userId = getUserId(context);
+  const user = await findUserById(userId);
+  const [value] = Object.values(args)
+  const check = (
+    user.collections.includes(value)
+    || user.curators.includes(value)
+    || user.issues.includes(value)
+  );
+  if (check) {
+    return unsubscribeFrom(args, userId);
+  } else {
+    throw new Error('Not Subscribed');
+  };
+};
+
 module.exports = {
   userSignup,
   userLogin,
@@ -168,4 +200,6 @@ module.exports = {
   collectionEdit,
   issueCreate,
   issueEdit,
+  subscribe,
+  unsubscribe,
 }

@@ -66,7 +66,7 @@ async function editCurator(args) {
   };
 };
 
-const findCurator = async args => await Curator.findOne({ args })
+const findCurator = async args => await Curator.findOne( args )
 
 const findCuratorById = async id => await Curator.findOne({_id: new ObjectId(id)});
 

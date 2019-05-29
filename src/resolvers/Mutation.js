@@ -39,21 +39,24 @@ async function userUpdate(parent, args, context, info) {
   if (!userAuth) throw new Error('No such user found');
   
   const valid = await bcrypt.compare(args.password, userAuth.password);
-  if (!valid) throw new Error('Invalid password');
+  if (valid){
+    const password = args.newPassword ? await bcrypt.hash(args.newPassword, 10) : userAuth.password;
+    const newDetails = {
+      id: userId,
+      name: args.name ? args.name : userAuth.name,
+      email: args.email ? args.email : userAuth.email,
+      password,
+    };
 
-  const newDetails = {
-    id: userId,
-    name: args.name ? args.name : userAuth.name,
-    email: args.email ? args.email : userAuth.email,
-    password: args.newPassword ? args.newPassword : userAuth.password,
-  };
-
-  const user = await editUser(newDetails);
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
-  
-  return {
-    token,
-    user,
+    const user = await editUser(newDetails);
+    const token = jwt.sign({ userId: user.id }, APP_SECRET);
+    
+    return {
+      token,
+      user,
+    };
+  } else {
+    throw new Error('Invalid password');
   };
 };
 
